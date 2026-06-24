@@ -93,7 +93,7 @@ if (namingForm && namingButton && namingMessage) {
     const data = new FormData(namingForm);
     const get = (name) => data.get(name)?.trim() || "미입력";
     const message = [
-      "[현명역학원 유료 작명 신청]",
+      "[현명 원장님 유료 작명 신청]",
       `신청자 이름: ${get("applicant")}`,
       `연락처: ${get("phone")}`,
       `작명 대상: ${get("target")}`,
