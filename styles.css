@@ -899,6 +899,12 @@ h3 {
   font-size: 22px;
 }
 
+.mentor-note .mentor-books-title {
+  margin-top: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 250, 241, 0.18);
+}
+
 .mentor-note span {
   padding-top: 12px;
   border-top: 1px solid rgba(255, 250, 241, 0.18);
