@@ -64,45 +64,69 @@
       <section id="courses" class="section course-section">
         <div class="section-head">
           <p class="eyebrow dark">LECTURES</p>
-          <h2>강의 소개</h2>
+          <h2>동영상 강의 소개</h2>
           <p>
-            현명역학원의 강의는 명리학의 기본 개념을 정확히 세우고, 실제 상담에서
-            활용할 수 있는 해석력까지 기르는 것을 목표로 합니다.
+            현명역학원의 Vimeo 동영상 강의 과정입니다. 천간과 지지의 기본부터
+            원국 분석, 세운 풀이, 작명, 창업 상담까지 단계적으로 학습합니다.
           </p>
         </div>
 
         <div class="lecture-layout">
-          <aside class="lecture-list" aria-label="강의 과정">
-            <button class="lecture-card is-active" type="button" data-course="basic">
-              <span>기초 과정</span>
-              <strong>사주명리 첫걸음</strong>
-              <small>음양오행, 천간지지, 십성의 기본 구조</small>
+          <aside class="lecture-list video-course-list" aria-label="Vimeo 동영상 강의 과정">
+            <button class="lecture-card is-active" type="button" data-course="heavenly">
+              <span>기초 이론</span>
+              <strong>천간론</strong>
+              <small>십천간의 성정과 작용을 체계적으로 정리</small>
             </button>
-            <button class="lecture-card" type="button" data-course="flow">
-              <span>심화 과정</span>
-              <strong>오행과 운의 흐름</strong>
-              <small>원국 분석, 대운과 세운의 적용</small>
+            <button class="lecture-card" type="button" data-course="earthly">
+              <span>기초 이론</span>
+              <strong>지지론</strong>
+              <small>십이지지, 지장간, 합충형파해의 이해</small>
             </button>
-            <button class="lecture-card" type="button" data-course="practice">
-              <span>실전 과정</span>
-              <strong>상담 통변 훈련</strong>
-              <small>직업, 재물, 관계, 건강 질문별 해석</small>
+            <button class="lecture-card" type="button" data-course="chart">
+              <span>분석 과정</span>
+              <strong>원국분석</strong>
+              <small>사주 원국의 구조와 격, 조후, 균형 판단</small>
+            </button>
+            <button class="lecture-card" type="button" data-course="yearly">
+              <span>운세 과정</span>
+              <strong>세운분석</strong>
+              <small>해마다 달라지는 운의 흐름과 시기 판단</small>
+            </button>
+            <button class="lecture-card" type="button" data-course="naming">
+              <span>작명 과정</span>
+              <strong>작명강의</strong>
+              <small>명리 원리를 바탕으로 한 이름 분석과 작명</small>
+            </button>
+            <button class="lecture-card" type="button" data-course="business">
+              <span>창업 과정</span>
+              <strong>창업반 강의</strong>
+              <small>사업, 직업, 창업 시기와 방향을 보는 법</small>
+            </button>
+            <button class="lecture-card" type="button" data-course="practice-yearly">
+              <span>실전 풀이</span>
+              <strong>실전 세운 풀이 강의</strong>
+              <small>실제 사례로 익히는 세운 상담 풀이</small>
             </button>
           </aside>
 
           <article class="player-panel official-panel">
             <div class="official-card">
-              <p class="eyebrow dark">PROGRAM</p>
-              <h3 id="courseTitle">사주명리 첫걸음</h3>
+              <p class="eyebrow dark">VIMEO LECTURE</p>
+              <h3 id="courseTitle">천간론</h3>
               <p id="courseDesc">
-                사주 팔자의 구성과 명리학을 공부할 때 반드시 잡아야 할 기본
-                관점을 정리합니다.
+                십천간의 성정과 작용을 이해하고 원국 해석의 기본 언어를 정리합니다.
               </p>
               <ul class="feature-list" id="courseList">
-                <li>음양오행의 기본 원리</li>
-                <li>천간과 지지의 구조</li>
-                <li>사주 원국을 읽는 첫 기준</li>
+                <li>갑을병정무기경신임계의 기본 성정</li>
+                <li>천간의 생극과 조합</li>
+                <li>실제 원국에서 천간을 읽는 기준</li>
               </ul>
+              <div class="vimeo-placeholder" id="vimeoPlaceholder">
+                <strong>Vimeo 링크 등록 대기</strong>
+                <span>각 강의의 Vimeo 영상 ID를 등록하면 이 영역에서 바로 재생됩니다.</span>
+              </div>
+              <div class="vimeo-embed" id="vimeoEmbed" hidden></div>
             </div>
           </article>
         </div>

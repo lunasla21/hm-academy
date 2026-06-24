@@ -1,35 +1,84 @@
 const courses = {
-  basic: {
-    title: "사주명리 첫걸음",
-    desc: "사주 팔자의 구성과 명리학을 공부할 때 반드시 잡아야 할 기본 관점을 정리합니다.",
-    items: ["음양오행의 기본 원리", "천간과 지지의 구조", "사주 원국을 읽는 첫 기준"],
+  heavenly: {
+    title: "천간론",
+    desc: "십천간의 성정과 작용을 이해하고 원국 해석의 기본 언어를 정리합니다.",
+    items: ["갑을병정무기경신임계의 기본 성정", "천간의 생극과 조합", "실제 원국에서 천간을 읽는 기준"],
+    vimeoId: "",
   },
-  flow: {
-    title: "오행과 운의 흐름",
-    desc: "원국의 균형과 대운, 세운의 흐름을 함께 보며 시기별 변화의 맥락을 익힙니다.",
-    items: ["오행의 생극제화", "대운과 세운의 적용", "흐름 중심의 해석 훈련"],
+  earthly: {
+    title: "지지론",
+    desc: "십이지지와 지장간, 합충형파해를 통해 땅의 흐름과 사건의 작용을 배웁니다.",
+    items: ["십이지지의 기본 성질", "지장간과 계절의 흐름", "합충형파해의 실제 적용"],
+    vimeoId: "",
   },
-  practice: {
-    title: "상담 통변 훈련",
-    desc: "현장에서 자주 만나는 질문을 기준으로 상담 언어를 구성하는 실전 해석법을 다룹니다.",
-    items: ["직업과 재물 상담", "관계와 가족 상담", "건강과 시기 판단"],
+  chart: {
+    title: "원국분석",
+    desc: "사주 원국의 구조를 읽고 격, 조후, 균형을 판단하는 분석 과정을 다룹니다.",
+    items: ["일간 중심의 원국 파악", "격국과 조후 판단", "신강신약과 균형 분석"],
+    vimeoId: "",
+  },
+  yearly: {
+    title: "세운분석",
+    desc: "해마다 들어오는 운의 작용을 읽고 시기별 변화와 상담 포인트를 정리합니다.",
+    items: ["세운의 기본 작용", "대운과 세운의 관계", "연도별 변화 해석"],
+    vimeoId: "",
+  },
+  naming: {
+    title: "작명강의",
+    desc: "명리 원리를 바탕으로 이름의 기운을 분석하고 작명의 기준을 세웁니다.",
+    items: ["사주와 이름의 관계", "오행 균형을 고려한 작명", "이름 분석 실전 기준"],
+    vimeoId: "",
+  },
+  business: {
+    title: "창업반 강의",
+    desc: "사업과 직업의 방향, 창업 시기, 재물 흐름을 상담 관점에서 해석합니다.",
+    items: ["창업 적성과 방향", "사업운과 재물 흐름", "창업 시기 판단"],
+    vimeoId: "",
+  },
+  "practice-yearly": {
+    title: "실전 세운 풀이 강의",
+    desc: "실제 사례를 중심으로 세운을 어떻게 읽고 상담 언어로 풀어낼지 훈련합니다.",
+    items: ["실제 사례별 세운 풀이", "상담 질문별 해석 구조", "연도별 핵심 포인트 정리"],
+    vimeoId: "",
   },
 };
 
 const title = document.querySelector("#courseTitle");
 const desc = document.querySelector("#courseDesc");
 const list = document.querySelector("#courseList");
+const placeholder = document.querySelector("#vimeoPlaceholder");
+const embed = document.querySelector("#vimeoEmbed");
 const cards = document.querySelectorAll(".lecture-card");
+
+function renderCourse(courseKey) {
+  const course = courses[courseKey];
+
+  title.textContent = course.title;
+  desc.textContent = course.desc;
+  list.innerHTML = course.items.map((item) => `<li>${item}</li>`).join("");
+
+  if (course.vimeoId) {
+    embed.hidden = false;
+    placeholder.hidden = true;
+    embed.innerHTML = `
+      <iframe
+        src="https://player.vimeo.com/video/${course.vimeoId}"
+        title="${course.title}"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    `;
+  } else {
+    embed.hidden = true;
+    placeholder.hidden = false;
+    embed.innerHTML = "";
+  }
+}
 
 cards.forEach((card) => {
   card.addEventListener("click", () => {
-    const course = courses[card.dataset.course];
-
     cards.forEach((item) => item.classList.remove("is-active"));
     card.classList.add("is-active");
-
-    title.textContent = course.title;
-    desc.textContent = course.desc;
-    list.innerHTML = course.items.map((item) => `<li>${item}</li>`).join("");
+    renderCourse(card.dataset.course);
   });
 });

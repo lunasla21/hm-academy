@@ -313,6 +313,10 @@ h3 {
   gap: 12px;
 }
 
+.video-course-list {
+  align-content: start;
+}
+
 .lecture-card {
   width: 100%;
   min-height: 132px;
@@ -415,6 +419,42 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 6px;
   font-weight: 700;
+}
+
+.vimeo-placeholder {
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 24px;
+  color: var(--white);
+  background: var(--ink);
+  border-radius: 8px;
+}
+
+.vimeo-placeholder strong {
+  color: var(--gold);
+  font-size: 22px;
+}
+
+.vimeo-placeholder span {
+  color: rgba(255, 250, 241, 0.74);
+}
+
+.vimeo-embed {
+  position: relative;
+  margin-top: 24px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #111;
+  border-radius: 8px;
+}
+
+.vimeo-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 .video-frame {
