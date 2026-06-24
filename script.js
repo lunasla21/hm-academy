@@ -82,3 +82,36 @@ cards.forEach((card) => {
     renderCourse(card.dataset.course);
   });
 });
+
+const namingForm = document.querySelector("#namingForm");
+const namingButton = document.querySelector("#makeNamingMessage");
+const namingMessage = document.querySelector("#namingMessage");
+const copyStatus = document.querySelector("#copyStatus");
+
+if (namingForm && namingButton && namingMessage) {
+  namingButton.addEventListener("click", async () => {
+    const data = new FormData(namingForm);
+    const get = (name) => data.get(name)?.trim() || "미입력";
+    const message = [
+      "[현명역학원 유료 작명 신청]",
+      `신청자 이름: ${get("applicant")}`,
+      `연락처: ${get("phone")}`,
+      `작명 대상: ${get("target")}`,
+      `성별: ${get("gender")}`,
+      `생년월일: ${get("birthDate")}`,
+      `태어난 시간: ${get("birthTime")}`,
+      `요청사항: ${get("memo")}`,
+      "",
+      "확인 후 작명 상담 안내 부탁드립니다.",
+    ].join("\n");
+
+    namingMessage.value = message;
+
+    try {
+      await navigator.clipboard.writeText(message);
+      if (copyStatus) copyStatus.textContent = "신청 내용이 복사되었습니다. 문자 문의에 붙여넣어 보내주세요.";
+    } catch {
+      if (copyStatus) copyStatus.textContent = "신청 내용이 정리되었습니다. 내용을 선택해 복사한 뒤 문자로 보내주세요.";
+    }
+  });
+}

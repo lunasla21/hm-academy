@@ -609,6 +609,116 @@ h3 {
   color: rgba(255, 250, 241, 0.84);
 }
 
+.naming-section {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.92), rgba(236, 224, 206, 0.88)),
+    var(--white);
+}
+
+.naming-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.naming-form,
+.naming-info {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 14px 42px rgba(26, 20, 13, 0.08);
+}
+
+.naming-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: clamp(22px, 3vw, 34px);
+  background: var(--white);
+}
+
+.naming-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.naming-form label.full {
+  grid-column: 1 / -1;
+}
+
+.naming-form input,
+.naming-form select,
+.naming-form textarea,
+.naming-message {
+  width: 100%;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.naming-form input,
+.naming-form select {
+  min-height: 48px;
+  padding: 0 12px;
+}
+
+.naming-form textarea,
+.naming-message {
+  padding: 12px;
+  resize: vertical;
+}
+
+.naming-info {
+  display: grid;
+  gap: 12px;
+  padding: clamp(22px, 3vw, 30px);
+  color: var(--white);
+  background:
+    linear-gradient(145deg, rgba(49, 88, 79, 0.94), rgba(22, 22, 22, 0.96)),
+    var(--jade);
+}
+
+.naming-info strong {
+  color: var(--gold);
+  font-size: 24px;
+}
+
+.naming-info span {
+  color: rgba(255, 250, 241, 0.82);
+}
+
+.naming-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.naming-message {
+  min-height: 170px;
+  margin-top: 8px;
+  color: var(--white);
+  background: rgba(255, 250, 241, 0.08);
+  border-color: rgba(255, 250, 241, 0.18);
+}
+
+.naming-message::placeholder {
+  color: rgba(255, 250, 241, 0.54);
+}
+
+.copy-status {
+  min-height: 24px;
+  margin: 0;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 800;
+}
+
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -895,7 +1005,7 @@ footer {
   nav {
     display: grid;
     width: calc(100dvw - 36px);
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
     font-size: 11px;
   }
@@ -932,6 +1042,7 @@ footer {
   .lecture-layout,
   .split-section,
   .mentor-section,
+  .naming-layout,
   .pricing-grid,
   .book-grid {
     grid-template-columns: 1fr;
@@ -972,6 +1083,11 @@ footer {
   }
 
   .book-card {
+    grid-template-columns: 1fr;
+  }
+
+  .naming-form,
+  .naming-actions {
     grid-template-columns: 1fr;
   }
 
