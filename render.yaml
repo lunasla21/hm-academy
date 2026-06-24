@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: hm-academy
+    runtime: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
