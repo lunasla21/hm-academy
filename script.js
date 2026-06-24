@@ -1,101 +1,35 @@
-const lectures = {
-  "76979871": {
+const courses = {
+  basic: {
     title: "사주명리 첫걸음",
-    desc: "사주 팔자의 기본 구성과 명리학을 공부할 때 반드시 잡아야 할 관점을 정리합니다.",
-    paid: false,
+    desc: "사주 팔자의 구성과 명리학을 공부할 때 반드시 잡아야 할 기본 관점을 정리합니다.",
+    items: ["음양오행의 기본 원리", "천간과 지지의 구조", "사주 원국을 읽는 첫 기준"],
   },
-  "148751763": {
-    title: "오행의 흐름 읽기",
-    desc: "목화토금수의 상생과 상극을 실제 원국 분석에 적용하는 방법을 익힙니다.",
-    paid: true,
+  flow: {
+    title: "오행과 운의 흐름",
+    desc: "원국의 균형과 대운, 세운의 흐름을 함께 보며 시기별 변화의 맥락을 익힙니다.",
+    items: ["오행의 생극제화", "대운과 세운의 적용", "흐름 중심의 해석 훈련"],
   },
-  "22439234": {
-    title: "상담 해석 프레임",
-    desc: "질문을 분류하고 상담 흐름을 만드는 실전형 해석 프레임을 다룹니다.",
-    paid: true,
+  practice: {
+    title: "상담 통변 훈련",
+    desc: "현장에서 자주 만나는 질문을 기준으로 상담 언어를 구성하는 실전 해석법을 다룹니다.",
+    items: ["직업과 재물 상담", "관계와 가족 상담", "건강과 시기 판단"],
   },
 };
 
-const state = {
-  member: JSON.parse(localStorage.getItem("hmMember") || "null"),
-  hasPass: localStorage.getItem("hmCoursePass") === "true",
-};
-
-const player = document.querySelector("#vimeoPlayer");
-const title = document.querySelector("#lectureTitle");
-const desc = document.querySelector("#lectureDesc");
+const title = document.querySelector("#courseTitle");
+const desc = document.querySelector("#courseDesc");
+const list = document.querySelector("#courseList");
 const cards = document.querySelectorAll(".lecture-card");
-const videoLock = document.querySelector("#videoLock");
-const memberStatus = document.querySelector("#memberStatus");
-const authModal = document.querySelector("#authModal");
-const payModal = document.querySelector("#payModal");
-const memberName = document.querySelector("#memberName");
-const memberEmail = document.querySelector("#memberEmail");
-
-function updateMemberStatus() {
-  const name = state.member?.name || "비회원";
-  const pass = state.hasPass ? "한달 무한 구독 이용 중" : "무료 미리보기만 가능";
-  memberStatus.textContent = `현재 상태: ${name} / ${pass}`;
-
-  cards.forEach((card) => {
-    if (card.dataset.paid === "true") {
-      card.classList.toggle("locked", !state.hasPass);
-    }
-  });
-}
-
-function selectLecture(videoId) {
-  const lecture = lectures[videoId];
-  const isLocked = lecture.paid && !state.hasPass;
-
-  cards.forEach((item) => item.classList.remove("is-active"));
-  document.querySelector(`[data-video="${videoId}"]`)?.classList.add("is-active");
-
-  title.textContent = lecture.title;
-  desc.textContent = lecture.desc;
-  videoLock.hidden = !isLocked;
-
-  if (!isLocked) {
-    player.src = `https://player.vimeo.com/video/${videoId}`;
-  }
-}
 
 cards.forEach((card) => {
-  card.addEventListener("click", () => selectLecture(card.dataset.video));
-});
+  card.addEventListener("click", () => {
+    const course = courses[card.dataset.course];
 
-document.querySelectorAll("[data-open-auth]").forEach((button) => {
-  button.addEventListener("click", () => {
-    memberName.value = state.member?.name || "";
-    memberEmail.value = state.member?.email || "";
-    authModal.showModal();
+    cards.forEach((item) => item.classList.remove("is-active"));
+    card.classList.add("is-active");
+
+    title.textContent = course.title;
+    desc.textContent = course.desc;
+    list.innerHTML = course.items.map((item) => `<li>${item}</li>`).join("");
   });
 });
-
-document.querySelector("#saveMember").addEventListener("click", () => {
-  const name = memberName.value.trim() || "현명 회원";
-  const email = memberEmail.value.trim() || "member@example.com";
-  state.member = { name, email };
-  localStorage.setItem("hmMember", JSON.stringify(state.member));
-  updateMemberStatus();
-  authModal.close();
-});
-
-document.querySelectorAll("[data-demo-pay]").forEach((button) => {
-  button.addEventListener("click", () => payModal.showModal());
-});
-
-document.querySelector("#completeDemoPay").addEventListener("click", () => {
-  if (!state.member) {
-    state.member = { name: "현명 회원", email: "member@example.com" };
-    localStorage.setItem("hmMember", JSON.stringify(state.member));
-  }
-
-  state.hasPass = true;
-  localStorage.setItem("hmCoursePass", "true");
-  updateMemberStatus();
-  payModal.close();
-  selectLecture("148751763");
-});
-
-updateMemberStatus();

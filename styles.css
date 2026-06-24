@@ -381,6 +381,42 @@ h3 {
   box-shadow: var(--shadow);
 }
 
+.official-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.96), rgba(236, 224, 206, 0.92)),
+    var(--white);
+}
+
+.official-card {
+  display: grid;
+  align-content: center;
+  min-height: 100%;
+  padding: clamp(26px, 4vw, 48px);
+}
+
+.official-card p:not(.eyebrow) {
+  margin: 16px 0 0;
+  color: var(--ink-soft);
+  font-size: 18px;
+}
+
+.feature-list {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  padding: 14px 16px;
+  color: var(--ink-soft);
+  background: rgba(255, 250, 241, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-weight: 700;
+}
+
 .video-frame {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -666,6 +702,45 @@ h3 {
   color: rgba(255, 250, 241, 0.72);
 }
 
+.contact-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.contact-lines a {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  padding: 0 16px;
+  color: var(--ink);
+  background: var(--gold);
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.business-card {
+  display: grid;
+  gap: 10px;
+  min-width: min(360px, 100%);
+  padding: 24px;
+  color: var(--white);
+  background: rgba(255, 250, 241, 0.07);
+  border: 1px solid rgba(255, 250, 241, 0.16);
+  border-radius: 8px;
+}
+
+.business-card strong {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.business-card span {
+  color: rgba(255, 250, 241, 0.78);
+}
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -767,9 +842,9 @@ footer {
   nav {
     display: grid;
     width: calc(100dvw - 36px);
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 6px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   nav a {

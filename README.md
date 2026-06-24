@@ -1,18 +1,15 @@
-# 현명역학원 아카데미 Render 배포용
+# 현명역학원 공식 홈페이지
 
-이 폴더를 GitHub 저장소에 올린 뒤 Render에서 Static Site로 연결하면 됩니다.
+현명역학원 공식 홈페이지 정적 사이트입니다.
 
-## Render 설정
+## 주요 섹션
 
-- Service type: Static Site
-- Build command: 비워두기
-- Publish directory: `.`
+- 강의 소개
+- 커리큘럼
+- 원장 소개
+- 출간 도서
+- 상담 문의
 
-## 도메인 연결
+## 배포
 
-Render 배포가 끝난 뒤 Custom Domains에서 아래 도메인을 추가합니다.
-
-- `hmsaju83.com`
-- `www.hmsaju83.com`
-
-Render가 알려주는 DNS 값을 가비아 DNS에 입력하면 실제 도메인이 새 사이트로 연결됩니다.
+Render Static Site에서 `main` 브랜치를 배포합니다.
