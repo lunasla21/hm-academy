@@ -328,12 +328,20 @@
           <p class="eyebrow dark">LIFE CONSULT</p>
           <h2>현명역학원 고민 상담</h2>
           <p>
-            마음에 걸리는 문제를 적어주시면 현명역학원의 통변 문체로 흐름과 선택의 방향을
-            정리해 드립니다.
+            생년월일시와 고민을 바탕으로 만세력을 세우고, 현명역학원의 통변 문체로
+            흐름과 선택의 방향을 정리해 드립니다.
           </p>
         </div>
         <div class="concern-layout">
           <form class="concern-form" id="concernForm">
+            <label>
+              생년월일
+              <input type="date" name="birthDate" />
+            </label>
+            <label>
+              태어난 시간
+              <input type="time" name="birthTime" />
+            </label>
             <label>
               고민 분야
               <select name="concernType">
@@ -348,25 +356,24 @@
               </select>
             </label>
             <label>
-              현재 마음
-              <select name="mood">
-                <option value="막막함">막막함</option>
-                <option value="불안함">불안함</option>
-                <option value="망설임">망설임</option>
-                <option value="답답함">답답함</option>
-                <option value="정리가 필요함">정리가 필요함</option>
+              성별
+              <select name="gender">
+                <option value="미입력">선택 안 함</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
               </select>
             </label>
             <label class="full">
               고민 내용
               <textarea name="concernMemo" rows="7" placeholder="예: 지금 직장을 계속 다녀야 할지, 이직을 준비해야 할지 고민입니다."></textarea>
             </label>
-            <button class="button primary" type="button" id="makeConcernAnswer">상담 답변 보기</button>
+            <p class="concern-note">간편 만세력은 양력 생년월일시 기준으로 계산됩니다.</p>
+            <button class="button primary" type="button" id="makeConcernAnswer">만세력 풀이 보기</button>
           </form>
           <aside class="concern-result">
             <strong>상담 결과</strong>
-            <span>입력하신 고민을 바탕으로 흐름, 주의점, 선택 방향을 정리합니다.</span>
-            <textarea id="concernAnswer" class="concern-answer" rows="14" readonly placeholder="고민 내용을 입력하면 이곳에 상담 답변이 표시됩니다."></textarea>
+            <span>사주 네 기둥을 먼저 세우고, 고민에 맞는 흐름과 선택 방향을 정리합니다.</span>
+            <textarea id="concernAnswer" class="concern-answer" rows="16" readonly placeholder="생년월일시와 고민 내용을 입력하면 만세력 풀이가 표시됩니다."></textarea>
             <div class="concern-actions">
               <button class="button light" type="button" id="copyConcernAnswer">답변 복사</button>
               <a class="button ghost" href="tel:010-8708-0544">상담 문의</a>
