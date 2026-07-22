@@ -461,7 +461,7 @@ function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
   });
 
   return [
-    "[현명역학원 SAJUWAR 전략 상담]",
+    "[쭈쌤의 사주전쟁]",
     "",
     "① 전장 분석",
     `생년월일시: ${pillars.year}년 ${pillars.month}월 ${pillars.day}일 ${String(pillars.hour).padStart(2, "0")}:${String(pillars.minute).padStart(2, "0")} 양력`,
@@ -546,7 +546,7 @@ if (concernForm && concernButton && concernAnswer) {
     }
 
     concernAnswer.value = makeConcernAnswer(type, gender, memo, reality, goal, makeFourPillars(birthDate, birthTime));
-    if (concernStatus) concernStatus.textContent = "전략 상담 결과가 정리되었습니다.";
+    if (concernStatus) concernStatus.textContent = "사주전쟁 결과가 정리되었습니다.";
   });
 }
 
