@@ -120,6 +120,27 @@ const heavenlyStems = ["갑", "을", "병", "정", "무", "기", "경", "신", "
 const earthlyBranches = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
 const stemElements = ["목", "목", "화", "화", "토", "토", "금", "금", "수", "수"];
 const branchElements = ["수", "토", "목", "목", "토", "화", "화", "토", "금", "금", "토", "수"];
+const hiddenStems = {
+  자: ["계"],
+  축: ["기", "계", "신"],
+  인: ["갑", "병", "무"],
+  묘: ["을"],
+  진: ["무", "을", "계"],
+  사: ["병", "무", "경"],
+  오: ["정", "기"],
+  미: ["기", "정", "을"],
+  신: ["경", "임", "무"],
+  유: ["신"],
+  술: ["무", "신", "정"],
+  해: ["임", "갑"],
+};
+const elementCycle = {
+  목: { supports: "화", controls: "토", supportedBy: "수", controlledBy: "금" },
+  화: { supports: "토", controls: "금", supportedBy: "목", controlledBy: "수" },
+  토: { supports: "금", controls: "수", supportedBy: "화", controlledBy: "목" },
+  금: { supports: "수", controls: "목", supportedBy: "토", controlledBy: "화" },
+  수: { supports: "목", controls: "화", supportedBy: "금", controlledBy: "토" },
+};
 const dayMasterTraits = {
   갑: "큰 나무처럼 바로 서려는 기운이 있어, 방향이 정해지면 밀고 나가는 힘이 있습니다.",
   을: "풀과 꽃처럼 환경을 읽고 적응하는 기운이 있어, 관계와 분위기의 영향을 많이 받습니다.",
@@ -133,14 +154,46 @@ const dayMasterTraits = {
   계: "비와 안개처럼 스며드는 기운이 있어, 직감과 관찰력이 깊게 작용합니다.",
 };
 const concernGuides = {
-  이직: "직업 자리를 옮기는 문제는 월지의 현실 자리와 세운의 변화 신호를 함께 보아야 합니다. 지금 고민은 불편함만 보고 움직일 일이 아니라, 내 일간이 감당할 수 있는 자리인지 따져야 합니다.",
-  직업: "직업운은 일간의 쓰임과 월지의 환경을 같이 봅니다. 잘하는 일과 오래 버틸 수 있는 일이 다를 수 있으니, 반복해도 기운이 꺾이지 않는 방향을 잡는 것이 중요합니다.",
-  재물: "재물운은 들어오는 돈보다 새는 흐름을 먼저 봅니다. 재성의 문제는 욕심을 키우기보다 현실의 수입, 지출, 약속을 정리할 때 안정됩니다.",
-  관계: "관계운은 합과 충의 흐름을 봅니다. 마음이 앞설 때는 말이 커지기 쉬우므로, 상대를 바꾸려 하기보다 내가 감당할 거리와 기준을 먼저 세워야 합니다.",
-  건강: "건강운은 오행의 치우침과 생활 리듬을 함께 봅니다. 몸이 흔들리면 판단도 흐려지므로, 무리해서 버티기보다 회복의 순서를 세우는 것이 먼저입니다.",
-  학업: "학업과 진로는 일간의 성향과 인성, 식상의 쓰임을 봅니다. 비교가 커질수록 흔들리니, 오래 집중할 수 있는 공부 방향을 잡는 것이 좋습니다.",
-  사업: "사업과 창업은 재성만 보지 않고 사람, 시기, 계약의 흐름을 함께 봅니다. 크게 벌리기보다 작게 검증하고 숫자로 확인하는 과정이 필요합니다.",
-  기타: "고민은 겉으로 하나처럼 보여도 안에는 시기, 사람, 마음의 문제가 함께 들어 있습니다. 지금은 무엇을 먼저 정리해야 하는지 순서를 잡는 것이 중요합니다.",
+  이직: {
+    reality: "이직은 현재 전장에서 후퇴하는 문제가 아니라 전장을 바꾸는 작전입니다. 감정, 조건, 성장 가능성을 분리해야 합니다.",
+    strategy: "퇴사 결론보다 탐색 작전을 먼저 세우십시오. 현재 직장의 리스크를 숫자로 정리하고, 새 자리의 조건을 검증한 뒤 움직이는 편이 좋습니다.",
+    quest: "오늘 채용공고 3개를 저장하고, 각 공고의 연봉·역할·위험요소를 한 줄씩 적기",
+  },
+  직업: {
+    reality: "직업은 일간의 쓰임과 월지의 현실 환경이 맞을 때 오래 갑니다. 잘하는 일과 버틸 수 있는 일을 나누어 봐야 합니다.",
+    strategy: "직무의 이름보다 반복되는 하루를 보십시오. 기운이 소모되는 업무와 성과가 나는 업무를 분리해 다음 방향을 잡으십시오.",
+    quest: "오늘 현재 업무 5개를 적고, 에너지가 생기는 일과 빠지는 일을 각각 표시하기",
+  },
+  재물: {
+    reality: "재물은 크게 얻는 운보다 새는 흐름을 막는 작전이 먼저입니다. 수입, 지출, 약속, 투자 리스크를 분리해야 합니다.",
+    strategy: "공격보다 방어를 먼저 세우십시오. 현금 흐름을 확인한 뒤 남는 힘으로 확장해야 합니다.",
+    quest: "오늘 이번 달 고정지출 5개와 줄일 수 있는 지출 1개를 적기",
+  },
+  관계: {
+    reality: "관계는 합과 충의 전장입니다. 상대를 바꾸는 전략보다 내가 감당할 거리와 말의 순서를 정하는 전략이 먼저입니다.",
+    strategy: "감정이 큰 날에는 결론을 내리지 마십시오. 핵심 요청 하나만 정하고 짧고 분명하게 말하는 편이 좋습니다.",
+    quest: "오늘 상대에게 요구하고 싶은 것 1개와 내가 양보 가능한 것 1개를 적기",
+  },
+  건강: {
+    reality: "건강은 전장의 보급선입니다. 몸이 흔들리면 판단도 흔들립니다. 사주는 경향을 볼 뿐 진단을 대신하지 않습니다.",
+    strategy: "무리하게 버티는 전략보다 회복 루틴을 먼저 세우십시오. 증상이 지속되면 의료기관 확인이 우선입니다.",
+    quest: "오늘 수면시간, 식사, 통증·피로 상태를 각각 한 줄로 기록하기",
+  },
+  학업: {
+    reality: "학업과 진로는 속도의 싸움이 아니라 집중을 유지할 수 있는 전장 선택입니다. 비교가 커지면 지휘권을 잃습니다.",
+    strategy: "남의 길보다 내 일간이 오래 견디는 과목과 환경을 찾으십시오. 작은 성취를 반복해야 합니다.",
+    quest: "오늘 25분 집중 공부 1회 실행하고, 끝난 뒤 어려웠던 부분 1개 적기",
+  },
+  사업: {
+    reality: "사업은 재성만의 문제가 아닙니다. 사람, 계약, 현금 흐름, 시기가 동시에 움직이는 전장입니다.",
+    strategy: "크게 벌리기보다 작게 검증하십시오. 약속은 문서로 남기고, 숫자가 확인되기 전 확장은 늦추는 편이 좋습니다.",
+    quest: "오늘 고객 1명에게 실제 구매 의사를 확인할 질문 3개 작성하기",
+  },
+  기타: {
+    reality: "고민은 하나처럼 보여도 마음, 사람, 돈, 시기의 문제가 섞여 있습니다. 먼저 전장을 나누어야 합니다.",
+    strategy: "가장 급한 문제와 가장 중요한 문제를 분리하십시오. 오늘 움직일 수 있는 작은 작전부터 세우는 것이 좋습니다.",
+    quest: "오늘 고민을 마음·돈·사람·시간 네 칸으로 나누어 한 줄씩 적기",
+  },
 };
 
 const concernForm = document.querySelector("#concernForm");
@@ -238,6 +291,51 @@ function getSeasonFlow(monthBranch) {
   return "월령은 토 기운의 전환 자리라 현실 점검, 균형, 마무리와 다음 준비가 중요합니다.";
 }
 
+function getElementCounts(pillars) {
+  const counts = { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };
+  [pillars.yearPillar, pillars.monthPillar, pillars.dayPillar, pillars.hourPillar].forEach((pillar) => {
+    counts[stemElements[heavenlyStems.indexOf(pillar.stem)]] += 1;
+    counts[branchElements[earthlyBranches.indexOf(pillar.branch)]] += 1;
+    hiddenStems[pillar.branch].forEach((stem) => {
+      counts[stemElements[heavenlyStems.indexOf(stem)]] += 0.5;
+    });
+  });
+  return counts;
+}
+
+function formatElementCounts(counts) {
+  return Object.entries(counts)
+    .sort((left, right) => right[1] - left[1])
+    .map(([element, count]) => `${element} ${count}`)
+    .join(" / ");
+}
+
+function getElementBalance(counts, dayElement) {
+  const sorted = Object.entries(counts).sort((left, right) => right[1] - left[1]);
+  const strongElements = sorted.filter(([, count]) => count >= sorted[0][1] - 0.5).map(([element]) => element);
+  const weakElements = sorted.filter(([, count]) => count <= sorted[sorted.length - 1][1] + 0.5).map(([element]) => element);
+  const daySupport = counts[dayElement] + counts[elementCycle[dayElement].supportedBy];
+  const pressure = counts[elementCycle[dayElement].controlledBy] + counts[elementCycle[dayElement].controls];
+  const strength = daySupport >= pressure ? "중심을 세울 힘이 있는 편" : "외부 요구와 현실 압박을 먼저 관리해야 하는 편";
+  const useful = daySupport >= pressure
+    ? [elementCycle[dayElement].controls, elementCycle[dayElement].supports]
+    : [elementCycle[dayElement].supportedBy, dayElement];
+  const enemy = daySupport >= pressure
+    ? [dayElement, elementCycle[dayElement].supportedBy]
+    : [elementCycle[dayElement].controlledBy, elementCycle[dayElement].controls];
+
+  return { strongElements, weakElements, strength, useful, enemy };
+}
+
+function getHiddenStemText(pillars) {
+  return [
+    `년지 ${pillars.yearPillar.branch}: ${hiddenStems[pillars.yearPillar.branch].join(", ")}`,
+    `월지 ${pillars.monthPillar.branch}: ${hiddenStems[pillars.monthPillar.branch].join(", ")}`,
+    `일지 ${pillars.dayPillar.branch}: ${hiddenStems[pillars.dayPillar.branch].join(", ")}`,
+    `시지 ${pillars.hourPillar.branch}: ${hiddenStems[pillars.hourPillar.branch].join(", ")}`,
+  ].join(" / ");
+}
+
 function getStemCombos(pillars) {
   const comboPairs = {
     갑: "기",
@@ -268,52 +366,159 @@ function getStemCombos(pillars) {
   return combos;
 }
 
-function makeConcernAnswer(type, gender, memo, pillars) {
+function getBranchClashes(pillars) {
+  const clashPairs = {
+    자: "오",
+    오: "자",
+    축: "미",
+    미: "축",
+    인: "신",
+    신: "인",
+    묘: "유",
+    유: "묘",
+    진: "술",
+    술: "진",
+    사: "해",
+    해: "사",
+  };
+  const branches = [
+    ["년지", pillars.yearPillar.branch],
+    ["월지", pillars.monthPillar.branch],
+    ["일지", pillars.dayPillar.branch],
+    ["시지", pillars.hourPillar.branch],
+  ];
+  const clashes = [];
+
+  branches.forEach(([leftName, leftBranch], leftIndex) => {
+    branches.slice(leftIndex + 1).forEach(([rightName, rightBranch]) => {
+      if (clashPairs[leftBranch] === rightBranch) clashes.push(`${leftName} ${leftBranch}와 ${rightName} ${rightBranch}`);
+    });
+  });
+
+  return clashes;
+}
+
+function getAnnualLuck(year) {
+  const pillar = getYearPillar(year, 7, 15);
+  return { year, ...pillar };
+}
+
+function getLuckCycleNote(gender, yearPillar) {
+  if (gender === "미입력") return "대운은 성별과 절입 기준을 함께 보아 순행·역행을 정해야 하므로, 간편판에서는 원국과 세운 중심으로 전략을 세웁니다.";
+  const yearStemIndex = heavenlyStems.indexOf(yearPillar.stem);
+  const isYangYear = yearStemIndex % 2 === 0;
+  const direction = (gender === "남성" && isYangYear) || (gender === "여성" && !isYangYear) ? "순행" : "역행";
+  return `대운 방향은 간편 기준으로 ${direction} 성향입니다. 정확한 대운 시작 나이는 절입 시각 계산이 필요하므로, 여기서는 현재 원국과 세운 활성만 전략에 반영합니다.`;
+}
+
+function getStoredConsultMemory() {
+  try {
+    return JSON.parse(localStorage.getItem("sajuwarConsultMemory") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function saveConsultMemory(entry) {
+  try {
+    const memory = getStoredConsultMemory();
+    memory.unshift(entry);
+    localStorage.setItem("sajuwarConsultMemory", JSON.stringify(memory.slice(0, 5)));
+  } catch {
+    return false;
+  }
+  return true;
+}
+
+function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
   const guide = concernGuides[type] || concernGuides.기타;
   const trimmedMemo = memo.trim();
   const shortMemo = trimmedMemo.length > 120 ? `${trimmedMemo.slice(0, 120)}...` : trimmedMemo;
+  const realityText = reality.trim() || "구체적인 현실 정보가 부족합니다. 전략 정확도를 높이려면 직업, 돈, 관계, 건강, 목표 상태를 더 적어야 합니다.";
+  const goalText = goal.trim() || "목표가 아직 명확하지 않습니다. 오늘의 퀘스트는 목표를 작게 정의하는 것부터 시작합니다.";
   const dayStem = pillars.dayPillar.stem;
   const dayElement = stemElements[heavenlyStems.indexOf(dayStem)];
   const monthElement = branchElements[earthlyBranches.indexOf(pillars.monthPillar.branch)];
+  const counts = getElementCounts(pillars);
+  const balance = getElementBalance(counts, dayElement);
   const stemCombos = getStemCombos(pillars);
+  const branchClashes = getBranchClashes(pillars);
+  const annualLuck = getAnnualLuck(new Date().getFullYear());
   const comboText = stemCombos.length
-    ? `천간합은 ${stemCombos.join(", ")}에서 보입니다. 현명역학원식으로는 이 합을 단순한 좋고 나쁨이 아니라, 마음이 묶이는 자리와 현실에서 움직이는 변곡점으로 봅니다.`
+    ? `천간합: ${stemCombos.join(", ")}. 합은 의지와 현실이 묶이는 자리이며, 조건이 맞을 때 행동의 방향을 바꿉니다.`
     : "천간합이 뚜렷하게 드러나지는 않으므로, 합보다 월령과 일간의 힘을 먼저 보아야 합니다.";
+  const clashText = branchClashes.length
+    ? `지지충: ${branchClashes.join(", ")}. 충은 무조건 나쁜 것이 아니라 전장의 이동, 갈등, 결단 압력으로 봅니다.`
+    : "지지충이 강하게 드러나지는 않으므로, 급한 충돌보다 내적 균형과 현실 조건을 먼저 봅니다.";
   const lateHourNote = pillars.hour === 23 ? "\n※ 23시 이후 출생은 상담 시 야자시 적용 여부를 함께 확인하는 것이 좋습니다." : "";
+  const memorySaved = saveConsultMemory({
+    birthDate: `${pillars.year}-${String(pillars.month).padStart(2, "0")}-${String(pillars.day).padStart(2, "0")}`,
+    birthTime: `${String(pillars.hour).padStart(2, "0")}:${String(pillars.minute).padStart(2, "0")}`,
+    gender,
+    concernType: type,
+    goal: goalText,
+    createdAt: new Date().toISOString(),
+  });
 
   return [
-    "[현명역학원 고민 상담]",
+    "[현명역학원 SAJUWAR 전략 상담]",
     "",
-    "간편 만세력",
+    "① 전장 분석",
     `생년월일시: ${pillars.year}년 ${pillars.month}월 ${pillars.day}일 ${String(pillars.hour).padStart(2, "0")}:${String(pillars.minute).padStart(2, "0")} 양력`,
     `성별: ${gender}`,
     `년주: ${pillars.yearPillar.label}`,
     `월주: ${pillars.monthPillar.label} (${pillars.monthPillar.monthName})`,
     `일주: ${pillars.dayPillar.label}`,
     `시주: ${pillars.hourPillar.label}`,
+    `지장간: ${getHiddenStemText(pillars)}`,
     lateHourNote,
     "",
-    `고민 분야: ${type}`,
+    "원국은 전장이고 일간은 지휘관입니다. 이 명식의 지휘관은 일간 " + dayStem + dayElement + "입니다. " + dayMasterTraits[dayStem],
     "",
-    "현명역학원식 풀이",
-    `이 사주는 일간이 ${dayStem}${dayElement}입니다. ${dayMasterTraits[dayStem]}`,
+    "② 계절 분석",
     getSeasonFlow(pillars.monthPillar.branch),
     `월지의 중심 기운은 ${monthElement}로 보며, 고민은 이 월령의 환경 안에서 일간이 어떻게 쓰이는지를 먼저 봅니다.`,
+    "",
+    "③ 오행 전쟁",
+    `오행 분포: ${formatElementCounts(counts)}`,
+    `강한 오행: ${balance.strongElements.join(", ")}`,
+    `약한 오행: ${balance.weakElements.join(", ")}`,
+    `일간 상태: ${balance.strength}`,
+    `용신 후보: ${balance.useful.join(", ")} / 기신 주의: ${balance.enemy.join(", ")}`,
     comboText,
+    clashText,
     "",
-    `말씀하신 내용: ${shortMemo}`,
+    "④ 현재 운의 변화",
+    getLuckCycleNote(gender, pillars.yearPillar),
+    `올해 세운: ${annualLuck.year}년 ${annualLuck.label}. 세운은 원국의 약한 부분을 자극하거나 강한 부분을 더 키우는 외부 전장입니다.`,
+    `세운 천간은 ${annualLuck.stem}(${stemElements[heavenlyStems.indexOf(annualLuck.stem)]}), 지지는 ${annualLuck.branch}(${branchElements[earthlyBranches.indexOf(annualLuck.branch)]})입니다. 올해는 ${stemElements[heavenlyStems.indexOf(annualLuck.stem)]}·${branchElements[earthlyBranches.indexOf(annualLuck.branch)]} 기운이 현실 사건을 통해 활성화됩니다.`,
     "",
-    guide,
+    "⑤ 현실에서의 의미",
+    `고민 분야: ${type}`,
+    `사용자 고민: ${shortMemo}`,
+    `현재 현실: ${realityText}`,
+    `원하는 목표: ${goalText}`,
     "",
-    "상담 결과",
-    "1. 지금의 고민은 감정만의 문제가 아니라, 내 사주의 중심 기운이 현재 환경과 맞는지 확인하라는 신호입니다.",
-    "2. 월주가 보여주는 현실 자리와 일주가 보여주는 나의 중심을 나누어 보면, 답은 서두름보다 준비의 순서에서 나옵니다.",
-    "3. 큰 선택은 한 번에 결론 내리지 말고 조건, 사람, 돈, 건강의 네 가지를 나누어 확인하십시오.",
+    guide.reality,
+    "사주는 결론을 대신 내려주는 도구가 아닙니다. 현실 자료가 부족하면 전략도 흐려집니다. 출생 정보는 지도이고, 현재 조건은 실제 전장입니다.",
     "",
-    "최종 조언",
-    "운은 억지로 끌고 가는 것이 아니라 때를 읽고 쓰는 것입니다. 지금은 내 마음이 흔들리는 이유와 현실에서 움직일 수 있는 조건을 분리해 보아야 합니다. 준비가 된 선택은 길이 되고, 준비 없는 선택은 같은 고민을 반복하게 만듭니다.",
+    "⑥ 전략",
+    guide.strategy,
+    "1. 감정과 사실을 분리하십시오.",
+    "2. 당장 결정할 일과 검증할 일을 나누십시오.",
+    `3. 용신 후보인 ${balance.useful.join(", ")}의 방식으로 움직이십시오. 즉, 나를 살리는 환경과 행동을 먼저 확보해야 합니다.`,
+    "4. 기신으로 작동하기 쉬운 요소는 과잉 반응, 무리한 확장, 준비 없는 결론으로 나타날 수 있으니 속도를 조절하십시오.",
     "",
-    "정확한 대운·세운·월운 풀이는 원장님 상담에서 생년월일시와 실제 상황을 함께 놓고 보시는 것이 좋습니다.",
+    "⑦ 오늘의 퀘스트",
+    guide.quest,
+    "기한: 내일 밤 9시",
+    "성공 기준: 메모 또는 파일로 결과가 남아 있을 것",
+    "",
+    "⑧ 메모리 업데이트",
+    memorySaved ? "저장됨: 생년월일시, 성별, 고민 분야, 목표가 이 브라우저에 구조화되어 저장되었습니다." : "저장 안 됨: 브라우저 저장소를 사용할 수 없어 이번 상담 내용은 화면에만 표시됩니다.",
+    "다음 상담에서는 오늘의 퀘스트를 완료했는지 먼저 점검하는 것이 좋습니다.",
+    "",
+    "주의: 이 결과는 운명을 예언하지 않습니다. 사주는 전략 지도이고, 결정과 실행의 지휘권은 사용자에게 있습니다.",
   ].join("\n");
 }
 
@@ -325,6 +530,8 @@ if (concernForm && concernButton && concernAnswer) {
     const type = data.get("concernType") || "기타";
     const gender = data.get("gender") || "미입력";
     const memo = data.get("concernMemo")?.trim() || "";
+    const reality = data.get("realityMemo")?.trim() || "";
+    const goal = data.get("goalMemo")?.trim() || "";
 
     if (!birthDate || !birthTime) {
       concernAnswer.value = "";
@@ -338,8 +545,8 @@ if (concernForm && concernButton && concernAnswer) {
       return;
     }
 
-    concernAnswer.value = makeConcernAnswer(type, gender, memo, makeFourPillars(birthDate, birthTime));
-    if (concernStatus) concernStatus.textContent = "만세력과 상담 풀이가 정리되었습니다.";
+    concernAnswer.value = makeConcernAnswer(type, gender, memo, reality, goal, makeFourPillars(birthDate, birthTime));
+    if (concernStatus) concernStatus.textContent = "전략 상담 결과가 정리되었습니다.";
   });
 }
 
