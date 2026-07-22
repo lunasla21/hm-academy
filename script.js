@@ -430,6 +430,44 @@ function saveConsultMemory(entry) {
   return true;
 }
 
+function getRealityQuestions(type) {
+  const common = [
+    "현재 직업 또는 주요 역할은 무엇입니까?",
+    "이번 결정을 언제까지 해야 합니까?",
+    "가장 두려운 손실은 돈, 관계, 시간, 건강 중 무엇입니까?",
+  ];
+  const byType = {
+    이직: ["현재 연봉과 원하는 연봉 범위는 어느 정도입니까?", "이미 지원한 회사나 제안받은 자리가 있습니까?"],
+    직업: ["현재 업무에서 가장 성과가 나는 일은 무엇입니까?", "반대로 가장 에너지가 빠지는 일은 무엇입니까?"],
+    재물: ["월 고정수입과 고정지출은 어느 정도입니까?", "투자, 대출, 동업 같은 위험 노출이 있습니까?"],
+    관계: ["상대와의 관계는 배우자, 연인, 가족, 직장 중 어디에 해당합니까?", "갈등이 반복되는 핵심 주제는 무엇입니까?"],
+    건강: ["현재 불편한 증상은 언제부터 이어졌습니까?", "이미 병원 검진이나 상담을 받은 적이 있습니까?"],
+    학업: ["현재 학년 또는 준비 중인 시험은 무엇입니까?", "가장 약한 과목과 가장 오래 집중 가능한 과목은 무엇입니까?"],
+    사업: ["현재 매출, 비용, 고객 수는 어느 정도입니까?", "동업자나 계약 관계가 있습니까?"],
+    기타: ["이 고민이 가장 크게 영향을 주는 영역은 어디입니까?", "이미 시도했지만 실패한 방법이 있습니까?"],
+  };
+  return [...(byType[type] || byType.기타), ...common].slice(0, 5);
+}
+
+function getRealityDepth(reality, goal) {
+  const combined = `${reality} ${goal}`.trim();
+  if (!combined) return 0;
+  const signals = ["연봉", "수입", "지출", "기간", "개월", "년", "회사", "직무", "가족", "배우자", "자녀", "사업", "매출", "건강", "병원", "목표", "계획"];
+  const signalCount = signals.filter((signal) => combined.includes(signal)).length;
+  return combined.length + signalCount * 20;
+}
+
+function getSocraticNotice(type, reality, goal) {
+  if (getRealityDepth(reality, goal) >= 90) return [];
+  return [
+    "소크라테스 모드",
+    "현실 정보가 아직 부족합니다. 중요한 조언은 질문 없이 단정하지 않습니다.",
+    "아래 질문에 답하면 전략 정확도가 올라갑니다.",
+    ...getRealityQuestions(type).map((question, index) => `${index + 1}. ${question}`),
+    "",
+  ];
+}
+
 function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
   const guide = concernGuides[type] || concernGuides.기타;
   const trimmedMemo = memo.trim();
@@ -444,6 +482,7 @@ function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
   const stemCombos = getStemCombos(pillars);
   const branchClashes = getBranchClashes(pillars);
   const annualLuck = getAnnualLuck(new Date().getFullYear());
+  const socraticNotice = getSocraticNotice(type, reality, goal);
   const comboText = stemCombos.length
     ? `천간합: ${stemCombos.join(", ")}. 합은 의지와 현실이 묶이는 자리이며, 조건이 맞을 때 행동의 방향을 바꿉니다.`
     : "천간합이 뚜렷하게 드러나지는 않으므로, 합보다 월령과 일간의 힘을 먼저 보아야 합니다.";
@@ -463,6 +502,8 @@ function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
   return [
     "[쭈쌤의 사주전쟁]",
     "",
+    ...socraticNotice,
+    "[사주 분석]",
     "① 전장 분석",
     `생년월일시: ${pillars.year}년 ${pillars.month}월 ${pillars.day}일 ${String(pillars.hour).padStart(2, "0")}:${String(pillars.minute).padStart(2, "0")} 양력`,
     `성별: ${gender}`,
@@ -493,6 +534,7 @@ function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
     `올해 세운: ${annualLuck.year}년 ${annualLuck.label}. 세운은 원국의 약한 부분을 자극하거나 강한 부분을 더 키우는 외부 전장입니다.`,
     `세운 천간은 ${annualLuck.stem}(${stemElements[heavenlyStems.indexOf(annualLuck.stem)]}), 지지는 ${annualLuck.branch}(${branchElements[earthlyBranches.indexOf(annualLuck.branch)]})입니다. 올해는 ${stemElements[heavenlyStems.indexOf(annualLuck.stem)]}·${branchElements[earthlyBranches.indexOf(annualLuck.branch)]} 기운이 현실 사건을 통해 활성화됩니다.`,
     "",
+    "[현실 분석]",
     "⑤ 현실에서의 의미",
     `고민 분야: ${type}`,
     `사용자 고민: ${shortMemo}`,
@@ -502,6 +544,11 @@ function makeConcernAnswer(type, gender, memo, reality, goal, pillars) {
     guide.reality,
     "사주는 결론을 대신 내려주는 도구가 아닙니다. 현실 자료가 부족하면 전략도 흐려집니다. 출생 정보는 지도이고, 현재 조건은 실제 전장입니다.",
     "",
+    "확인이 필요한 것",
+    "아래 내용은 사용자가 직접 확인해야 하는 현실 정보입니다.",
+    ...getRealityQuestions(type).slice(0, 3).map((question) => `- ${question}`),
+    "",
+    "[전략 제안]",
     "⑥ 전략",
     guide.strategy,
     "1. 감정과 사실을 분리하십시오.",
